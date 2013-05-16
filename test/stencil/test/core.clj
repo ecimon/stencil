@@ -14,9 +14,10 @@
 ;; Test that lambdas can access full context.
 
 (deftest pass-full-context-to-lambda-test
-  (is (= "b"
-         (render-string "{{#a?}}{{lambda}}{{/a?}}"
+  (is (= "c"
+         (render-string "{{#a?}}{{#b?}}{{lambda}}{{/b?}}{{/a?}}"
                         {:a? true
-                         :b "b"
+                         :b? true
+                         :c "c"
                          :lambda ^{:stencil/pass-context true}
-                         (fn [ctx] (render-string "{{b}}" ctx))}))))
+                         (fn [ctx] (render-string "{{c}}" ctx))}))))

@@ -80,6 +80,4 @@
   [context-stack]
   (apply merge
          (reverse
-           (if (map? (first context-stack))
-             context-stack
-             (rest context-stack)))))
+           (filter map? context-stack))))
