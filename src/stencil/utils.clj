@@ -73,3 +73,13 @@
       (if (:stencil/pass-context (meta lambda-fn))
         (lambda-fn content context)
         (lambda-fn content))))
+
+(defn merge-context-stack
+  "Merges a context stack into a single context map. If the first item in the
+  stack is not a map, it is discarded."
+  [context-stack]
+  (apply merge
+         (reverse
+           (if (map? (first context-stack))
+             context-stack
+             (rest context-stack)))))

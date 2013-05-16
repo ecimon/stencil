@@ -10,3 +10,13 @@
          (render-string "{{^a}}a{{b}}a{{/a}}" {:a [:b "11"]})))
   (is (= ""
          (render-string "{{^a}}a{{b}}a{{/a}}" {"a" ["b" "11"]}))))
+
+;; Test that lambdas can access full context.
+
+(deftest pass-full-context-to-lambda-test
+  (is (= "b"
+         (render-string "{{#a?}}{{lambda}}{{/a?}}"
+                        {:a? true
+                         :b "b"
+                         :lambda ^{:stencil/pass-context true}
+                         (fn [ctx] (render-string "{{b}}" ctx))}))))

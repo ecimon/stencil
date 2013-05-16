@@ -35,7 +35,7 @@
             (instance? clojure.lang.Fn ctx-val)
             (let [current-context (first context-stack)
                   lambda-return (call-lambda ctx-val (:content (:attrs this))
-                                             current-context)]
+                                             (merge-context-stack context-stack))]
               ;; We have to manually parse because the spec says lambdas in
               ;; sections get parsed with the current parser delimiters.
               (.append sb (render (parse lambda-return
@@ -51,7 +51,7 @@
       (if (instance? clojure.lang.Fn value)
         (.append sb (qtext/html-escape
                      (render-string (str (call-lambda value
-                                                      (first context-stack)))
+                                                      (merge-context-stack context-stack)))
                                     (first context-stack))))
         ;; Otherwise, just append its html-escaped value by default.
         (.append sb (qtext/html-escape (str value))))))
@@ -60,7 +60,7 @@
     (if-let [value (context-get context-stack (:name this))]
       (if (instance? clojure.lang.Fn value)
         (.append sb (render-string (str (call-lambda value
-                                                     (first context-stack)))
+                                                     (merge-context-stack context-stack)))
                                    (first context-stack)))
         ;; Otherwise, just append its value.
         (.append sb value)))))
